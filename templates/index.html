@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Share Location</title>
+</head>
+<body>
+    <h2>Tap 'Allow' to share your live location for safety purposes.</h2>
+    <script>
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const coords = position.coords;
+                fetch("/track", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        latitude: coords.latitude,
+                        longitude: coords.longitude
+                    })
+                }).then(res => console.log("Location sent"));
+            }, function(error) {
+                alert("Location permission denied. Please allow location access.");
+            });
+        } else {
+            alert("Geolocation is not supported by your browser.");
+        }
+    </script>
+</body>
+</html>
